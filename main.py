@@ -4,8 +4,10 @@
 import speech_recognition as sr
 import webbrowser as wb
 import pyttsx3 as tts
+import music_library as ml
+from playsound import playsound as ps
 
-# 
+# Initializing Objects For sr & tts
 recognizer = sr.Recognizer()
 engine = tts.init()
 
@@ -17,27 +19,34 @@ def speak(text):
 # Creating A Processing Function.
 def processCommand(command):
     if(command.lower() == "open google"):
-        wb.open("https://google.com")
         speak("Wait I'm Opening.....")
+        wb.open("https://google.com")
         
     elif(command.lower() == "open youtube"):
-        wb.open("https://youtube.com")
         speak("Wait I'm Opening.....")
+        wb.open("https://youtube.com")
 
     elif(command.lower() == "open chat gpt"):
-        wb.open("https://chatgpt.com")
         speak("Wait I'm Opening.....")
+        wb.open("https://chatgpt.com")
 
     elif(command.lower() == "open whatsapp"):
-        wb.open("https://whatsapp.com")
         speak("Wait I'm Opening.....")
+        wb.open("https://whatsapp.com")
+
+    # Adding Play-Song Functionality.
+    elif(command.lower().startswith("play")):
+        song = command.lower().split(" ")[1]
+        songLink = ml.music[song]
+        speak(f"Playing {song} On Youtube")
+        wb.open(songLink)
 
     else: 
         print(f"Invalid Command: {command}")
 
 # "name-main" Check
 if __name__ == "__main__":
-    speak("Initializing Jarvis.........")
+    speak("Hey There, I Am Jarvis And I Am Your Virtual Assistant")
 
     # 
     while (True):
@@ -46,14 +55,15 @@ if __name__ == "__main__":
         try:
             with sr.Microphone() as source:
                 print("Listining......")
-                audio = r.listen(source, timeout=2) # We Add Timeout As Well.....
+                audio = r.listen(source, timeout=2, phrase_time_limit=1) # We Add Timeout As Well.....
                 
             # Checking Commands.
             command = r.recognize_google(audio)
             print(command) 
 
             if(command.lower() == "hi jarvis" or command.lower() == "hey jarvis"):
-                speak("Yes, How May I Help You")
+                # speak("Yes, How May I Help You")
+                ps('alert.mp3')
 
                 # For Listining Command.
                 try: 
